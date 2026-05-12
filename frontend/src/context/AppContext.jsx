@@ -135,15 +135,23 @@ export function AppProvider({ children }) {
 
   const captureMobile = useCallback(
     (id, mobile) => {
-      updateReservation(id, {
-        mobile,
-        noContact: false,
-        checkinStatus: "Pending",
-        primaryGuest: undefined,
-      });
+      setState((s) => ({
+        ...s,
+        reservations: s.reservations.map((r) =>
+          r.id === id
+            ? {
+                ...r,
+                mobile,
+                noContact: false,
+                checkinStatus: "Pending",
+                primaryGuest: { ...(r.primaryGuest || {}), mobile },
+              }
+            : r
+        ),
+      }));
       logActivity("receptionist", `Mobile captured for ${id}: ${mobile}`);
     },
-    [updateReservation, logActivity]
+    [logActivity]
   );
 
   const createWalkin = useCallback(
