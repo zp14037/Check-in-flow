@@ -18,6 +18,7 @@ const ROLES = [
     icon: Bell,
     title: "Front Desk · Receptionist",
     desc: "Today's arrivals, check-in management",
+    micro: "Live arrivals · ID verification · Check-in completion",
     path: "/receptionist",
   },
   {
@@ -25,6 +26,7 @@ const ROLES = [
     icon: Mail,
     title: "Reservation Team",
     desc: "Email parser, booking console",
+    micro: "Email parser · OTA vouchers · IDS sync",
     path: "/reservation",
   },
   {
@@ -32,27 +34,31 @@ const ROLES = [
     icon: Briefcase,
     title: "Sales Team",
     desc: "Lead pipeline, CRM",
+    micro: "Lead pipeline · Corporate CRM · Handoff to reservation",
     path: "/sales",
   },
   {
-    key: "group",
+    key: "coordinator",
     icon: Users,
     title: "Group Coordinator",
     desc: "Event check-in tracker (external)",
-    path: "/group",
+    micro: "External portal · QR tracker · Bulk reminders",
+    path: "/coordinator",
   },
   {
-    key: "gm",
+    key: "management",
     icon: BarChart3,
     title: "General Manager",
     desc: "Executive overview, all modules",
-    path: "/gm",
+    micro: "All dashboards · RPA engine · System health",
+    path: "/management",
   },
   {
     key: "guest",
     icon: Smartphone,
     title: "Guest View",
     desc: "WhatsApp → check-in form experience",
+    micro: "WhatsApp preview · Pre-filled form · 4-step check-in",
     path: "/guest",
   },
 ];
@@ -186,6 +192,9 @@ export default function Landing() {
                 <p className="relative font-body text-[12px] text-[#F5F0E8]/55 mt-1.5 leading-relaxed">
                   {r.desc}
                 </p>
+                <p className="relative font-display italic text-[10px] text-[#C9A84C]/55 mt-4 leading-snug">
+                  {r.micro}
+                </p>
               </motion.button>
             );
           })}
@@ -193,16 +202,16 @@ export default function Landing() {
       </div>
 
       {/* Footer */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 pb-10 mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <img src="/della-logo.png" alt="Della Resorts" className="h-8 w-auto opacity-90" />
-          <span className="font-ui text-[10px] uppercase tracking-[0.32em] text-[#F5F0E8]/40">
-            Lonavala, Maharashtra · © 2026
-          </span>
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 pb-10 mt-4">
+        <div className="h-px bg-[#C9A84C]/20 mb-6" />
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <img src="/della-logo.png" alt="Della Resorts" className="h-8 w-auto opacity-90" />
+            <span className="font-ui text-[10px] uppercase tracking-[0.32em] text-[#F5F0E8]/40">
+              Della Resorts · Lonavala, Maharashtra · © 2026 · Built for hospitality teams
+            </span>
+          </div>
         </div>
-        <span className="font-ui text-[10px] uppercase tracking-[0.32em] text-[#F5F0E8]/30">
-          Crafted for hospitality teams
-        </span>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
  * Persists across screens & page refreshes via localStorage.
  */
 
-const STORAGE_KEY = "della_resorts_state_v1";
+const STORAGE_KEY = "della_resorts_state_v2";
 
 const seedReservations = [
   {

@@ -11,10 +11,10 @@ export default function GoldParticles({ count = 20 }) {
       Array.from({ length: count }).map((_, i) => ({
         id: i,
         left: Math.random() * 100,
-        size: 1.5 + Math.random() * 2.5,
-        duration: 14 + Math.random() * 18,
-        delay: Math.random() * -20,
-        opacity: 0.3 + Math.random() * 0.3,
+        size: 2 + Math.random() * 1, // 2–3px
+        duration: 14 + Math.random() * 4, // 14–18s
+        delay: Math.random() * -18, // random stagger
+        opacity: 0.2 + Math.random() * 0.2, // 0.2–0.4
         drift: -10 + Math.random() * 20,
       })),
     [count]

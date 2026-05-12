@@ -19,8 +19,10 @@ function App() {
           <Route path="/receptionist" element={<Receptionist />} />
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/sales" element={<Sales />} />
-          <Route path="/group" element={<GroupCoordinator />} />
-          <Route path="/gm" element={<GeneralManager />} />
+          <Route path="/coordinator" element={<GroupCoordinator />} />
+          <Route path="/group" element={<Navigate to="/coordinator" replace />} />
+          <Route path="/management" element={<GeneralManager />} />
+          <Route path="/gm" element={<Navigate to="/management" replace />} />
           <Route path="/guest" element={<GuestFlow />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

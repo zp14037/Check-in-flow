@@ -8,7 +8,13 @@ const ID_TYPES = ["Aadhaar Card", "Passport", "Driving Licence", "Voter ID"];
 const NATIONALITIES = ["🇮🇳 Indian", "🇺🇸 American", "🇬🇧 British", "🇦🇪 Emirati", "🇸🇬 Singaporean"];
 
 export default function Step1Personal({ booking, payload, update, onNext, onBack }) {
-  const p = booking.primaryGuest;
+  const p = booking?.primaryGuest || {
+    fullName: "",
+    mobile: "",
+    email: "",
+    nationality: "",
+    country: "",
+  };
 
   return (
     <StepShell
