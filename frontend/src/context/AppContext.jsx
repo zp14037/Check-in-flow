@@ -5,7 +5,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
  * Persists across screens & page refreshes via localStorage.
  */
 
-const STORAGE_KEY = "della_resorts_state_v2";
+const STORAGE_KEY = "della_resorts_state_v3";
 
 const seedReservations = [
   {
@@ -15,11 +15,13 @@ const seedReservations = [
     roomNumber: "CV-12",
     source: "direct",
     arrival: "2026-02-18",
+    expectedTime: "3:00 PM",
     nights: 2,
     guests: 2,
     adults: 2,
     children: 1,
-    mealPlan: "Breakfast",
+    mealPlan: "Breakfast Included",
+    mobile: "+91 98200 45621",
     primaryGuest: {
       fullName: "Aarav Mehta",
       mobile: "+91 98200 45621",
@@ -28,109 +30,38 @@ const seedReservations = [
       country: "India",
     },
     coGuests: [
-      { fullName: "", relationship: "", nationality: "", dob: "", idType: "" },
+      { fullName: "Meera Mehta", relationship: "Spouse", nationality: "Indian", dob: "", idType: "Aadhaar", idUploaded: false },
     ],
-    childGuests: [{ name: "Arjun", age: 6, guardian: "Aarav Mehta", dob: "" }],
+    childGuests: [{ name: "Arjun Mehta", age: 6, guardian: "Aarav Mehta" }],
+    occasion: "Anniversary",
+    occasionDetail: "14th Anniversary · 20 February",
+    specialRequest: "Rose petal turndown + anniversary cake at dinner. Coordinate with F&B team.",
+    idsSync: { status: "synced", at: "10:24 AM" },
     status: "Confirmed",
     checkinStatus: "Pending",
     idVerified: false,
     formSubmitted: false,
+    checkedIn: false,
     checkinPayload: null,
   },
-  {
-    id: "RES-2402",
-    guestName: "Priya Iyer",
-    roomType: "Lake Suite",
-    roomNumber: "LS-04",
-    source: "booking",
-    arrival: "2026-02-18",
-    nights: 3,
-    guests: 2,
-    status: "Confirmed",
-    checkinStatus: "Pending",
-    idVerified: false,
-    formSubmitted: false,
-  },
-  {
-    id: "RES-2403",
-    guestName: "Rohan Kapoor",
-    roomType: "Forest Cabana",
-    roomNumber: "FC-21",
-    source: "mmt",
-    arrival: "2026-02-18",
-    nights: 1,
-    guests: 4,
-    status: "Confirmed",
-    checkinStatus: "Pending",
-    idVerified: false,
-    formSubmitted: false,
-  },
-  {
-    id: "RES-2404",
-    guestName: "Kavya Sharma",
-    roomType: "Royal Penthouse",
-    roomNumber: "RP-01",
-    source: "sales",
-    arrival: "2026-02-19",
-    nights: 4,
-    guests: 2,
-    status: "Confirmed",
-    checkinStatus: "Pending",
-    idVerified: false,
-    formSubmitted: false,
-  },
-  {
-    id: "RES-2405",
-    guestName: "Vikram Singh",
-    roomType: "Lake Suite",
-    roomNumber: "LS-09",
-    source: "whatsapp",
-    arrival: "2026-02-18",
-    nights: 2,
-    guests: 3,
-    status: "Confirmed",
-    checkinStatus: "Pending",
-    idVerified: false,
-    formSubmitted: false,
-  },
-  {
-    id: "RES-2406",
-    guestName: "Mehra Family (Group)",
-    roomType: "Group Block · 8 rooms",
-    roomNumber: "BLK-2",
-    source: "group",
-    arrival: "2026-02-19",
-    nights: 2,
-    guests: 24,
-    status: "Confirmed",
-    checkinStatus: "Pending",
-    idVerified: false,
-    formSubmitted: false,
-  },
-  {
-    id: "RES-2407",
-    guestName: "Anita Desai",
-    roomType: "Standard Room",
-    roomNumber: "SR-32",
-    source: "walkin",
-    arrival: "2026-02-18",
-    nights: 1,
-    guests: 1,
-    status: "Hold",
-    checkinStatus: "Pending",
-    idVerified: false,
-    formSubmitted: false,
-  },
+  { id: "RES-2402", guestName: "Priya Sharma", roomType: "Lake Suite", roomNumber: "LS-04", source: "direct", arrival: "2026-02-18", expectedTime: "2:00 PM", nights: 3, adults: 2, children: 0, mobile: "+91 98765 11220", primaryGuest: { fullName: "Priya Sharma", mobile: "+91 98765 11220", email: "priya.sharma@example.com", nationality: "Indian", country: "India" }, formSubmitted: false, idVerified: false, checkedIn: false, checkinStatus: "Pending", idsSync: { status: "synced", at: "09:50 AM" } },
+  { id: "BCom-8812", guestName: "James Wilson", roomType: "Superior", roomNumber: "SR-11", source: "booking", arrival: "2026-02-18", expectedTime: "4:00 PM", nights: 2, adults: 2, children: 0, mobile: "", primaryGuest: { fullName: "James Wilson", mobile: "", email: "—", nationality: "British", country: "UK" }, formSubmitted: false, idVerified: false, checkedIn: false, checkinStatus: "No Contact", noContact: true, idsSync: { status: "pending" } },
+  { id: "MMT-4421", guestName: "Neha Kapoor", roomType: "Designer Suite", roomNumber: "DS-02", source: "mmt", arrival: "2026-02-18", expectedTime: "1:00 PM", nights: 2, adults: 2, children: 1, mobile: "+91 98311 22334", primaryGuest: { fullName: "Neha Kapoor", mobile: "+91 98311 22334", email: "neha.k@example.com", nationality: "Indian", country: "India" }, formSubmitted: false, idVerified: false, checkedIn: false, checkinStatus: "Pending", idsSync: { status: "synced", at: "10:01 AM" } },
+  { id: "SLS-1102", guestName: "Rahul Verma", roomType: "Conference", roomNumber: "CF-01", source: "sales", arrival: "2026-02-18", expectedTime: "12:00 PM", nights: 1, adults: 1, children: 0, mobile: "+91 99887 76655", primaryGuest: { fullName: "Rahul Verma", mobile: "+91 99887 76655", email: "rahul@acmecorp.com", nationality: "Indian", country: "India" }, formSubmitted: true, idVerified: true, checkedIn: false, checkinStatus: "ID Verified", idsSync: { status: "synced", at: "09:30 AM" } },
+  { id: "GRP-0091", guestName: "TCS Group", roomType: "12 Rooms", roomNumber: "GRP-A", source: "group", arrival: "2026-02-18", expectedTime: "11:00 AM", nights: 2, adults: 32, children: 0, mobile: "+91 98201 11111", primaryGuest: { fullName: "TCS Group Coordinator", mobile: "+91 98201 11111", email: "events@tcs.com", nationality: "Indian", country: "India" }, formSubmitted: false, idVerified: false, checkedIn: false, checkinStatus: "Group · 18/32", isGroup: true, groupTotal: 32, groupCheckedIn: 18, idsSync: { status: "synced", at: "08:45 AM" } },
+  { id: "WA-0032", guestName: "Aisha Khan", roomType: "Camp Tent", roomNumber: "CT-05", source: "whatsapp", arrival: "2026-02-18", expectedTime: "5:00 PM", nights: 2, adults: 2, children: 0, mobile: "+91 90909 12121", primaryGuest: { fullName: "Aisha Khan", mobile: "+91 90909 12121", email: "aisha.k@example.com", nationality: "Indian", country: "India" }, formSubmitted: true, idVerified: false, checkedIn: false, checkinStatus: "Form Submitted", idsSync: { status: "synced", at: "10:12 AM" } },
+  { id: "BCom-9002", guestName: "David Lee", roomType: "Luxury", roomNumber: "LR-08", source: "booking", arrival: "2026-02-18", expectedTime: "6:00 PM", nights: 2, adults: 2, children: 0, mobile: "", primaryGuest: { fullName: "David Lee", mobile: "", email: "—", nationality: "Singaporean", country: "Singapore" }, formSubmitted: false, idVerified: false, checkedIn: false, checkinStatus: "No Contact", noContact: true, idsSync: { status: "pending" } },
+  { id: "DL-2024895", guestName: "Sunita Rao", roomType: "Enclave", roomNumber: "EV-03", source: "direct", arrival: "2026-02-18", expectedTime: "3:30 PM", nights: 2, adults: 2, children: 0, mobile: "+91 98112 33445", primaryGuest: { fullName: "Sunita Rao", mobile: "+91 98112 33445", email: "sunita.r@example.com", nationality: "Indian", country: "India" }, formSubmitted: false, idVerified: false, checkedIn: false, checkinStatus: "Pending", idsSync: { status: "synced", at: "09:55 AM" } },
+  { id: "MMT-5521", guestName: "Kabir Mehta", roomType: "Adventure", roomNumber: "AR-14", source: "mmt", arrival: "2026-02-18", expectedTime: "2:30 PM", nights: 1, adults: 2, children: 0, mobile: "+91 98700 88990", primaryGuest: { fullName: "Kabir Mehta", mobile: "+91 98700 88990", email: "kabir.m@example.com", nationality: "Indian", country: "India" }, formSubmitted: false, idVerified: false, checkedIn: false, checkinStatus: "Pending", idsSync: { status: "synced", at: "09:40 AM" } },
+  { id: "WED-0011", guestName: "Sharma Wedding", roomType: "Presidential", roomNumber: "PS-01", source: "sales", arrival: "2026-02-18", expectedTime: "10:00 AM", nights: 3, adults: 4, children: 0, mobile: "+91 90000 11111", primaryGuest: { fullName: "Vihaan Sharma", mobile: "+91 90000 11111", email: "vihaan@example.com", nationality: "Indian", country: "India" }, formSubmitted: true, idVerified: true, checkedIn: false, checkinStatus: "ID Verified", idsSync: { status: "synced", at: "08:30 AM" } },
 ];
 
 const defaultState = {
   reservations: seedReservations,
+  notifications: 3,
   activityLog: [
-    {
-      ts: Date.now() - 1000 * 60 * 45,
-      actor: "system",
-      message: "Daily arrival manifest synced from PMS",
-    },
+    { ts: Date.now() - 1000 * 60 * 45, actor: "system", message: "Daily arrival manifest synced from PMS" },
+    { ts: Date.now() - 1000 * 60 * 30, actor: "system", message: "IDS FortuneNext: 9 of 11 bookings synced" },
   ],
 };
 
@@ -175,6 +106,7 @@ export function AppProvider({ children }) {
         formSubmitted: true,
         checkinStatus: "Form Submitted",
         checkinPayload: payload,
+        formSubmittedAt: Date.now(),
       });
       logActivity("guest", `Pre-check-in form submitted for ${id}`);
     },
@@ -189,6 +121,68 @@ export function AppProvider({ children }) {
     [updateReservation, logActivity]
   );
 
+  const markCheckedIn = useCallback(
+    (id) => {
+      updateReservation(id, {
+        checkedIn: true,
+        checkinStatus: "Checked-In",
+        checkedInAt: Date.now(),
+      });
+      logActivity("receptionist", `Checked in ${id}`);
+    },
+    [updateReservation, logActivity]
+  );
+
+  const captureMobile = useCallback(
+    (id, mobile) => {
+      updateReservation(id, {
+        mobile,
+        noContact: false,
+        checkinStatus: "Pending",
+        primaryGuest: undefined,
+      });
+      logActivity("receptionist", `Mobile captured for ${id}: ${mobile}`);
+    },
+    [updateReservation, logActivity]
+  );
+
+  const createWalkin = useCallback(
+    (data) => {
+      const id = `WLK-${String(Date.now()).slice(-4)}`;
+      const newRes = {
+        id,
+        guestName: data.fullName,
+        roomType: data.roomType,
+        roomNumber: data.roomNumber || "TBD",
+        source: "walkin",
+        arrival: new Date().toISOString().slice(0, 10),
+        expectedTime: "Now",
+        nights: data.nights,
+        adults: data.adults,
+        children: data.children,
+        mobile: data.mobile,
+        primaryGuest: {
+          fullName: data.fullName,
+          mobile: data.mobile,
+          email: "—",
+          nationality: "Indian",
+          country: "India",
+        },
+        occasion: data.occasion,
+        formSubmitted: false,
+        idVerified: false,
+        checkedIn: false,
+        checkinStatus: "Link Sent",
+        idsSync: { status: "synced", at: "Just Now" },
+        isWalkin: true,
+      };
+      setState((s) => ({ ...s, reservations: [newRes, ...s.reservations] }));
+      logActivity("receptionist", `Walk-in created · ${data.fullName} · link sent to ${data.mobile}`);
+      return id;
+    },
+    [logActivity]
+  );
+
   const resetDemo = useCallback(() => {
     setState(defaultState);
     localStorage.removeItem(STORAGE_KEY);
@@ -200,6 +194,9 @@ export function AppProvider({ children }) {
     updateReservation,
     markFormSubmitted,
     markIdVerified,
+    markCheckedIn,
+    captureMobile,
+    createWalkin,
     resetDemo,
   };
 
