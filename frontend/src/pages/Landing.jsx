@@ -109,15 +109,19 @@ export default function Landing() {
           ◆ Estd. 2007 · Lonavala
         </motion.p>
 
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display italic text-[#C9A84C] leading-none mt-5"
-          style={{ fontSize: "clamp(48px, 8vw, 88px)", fontWeight: 300 }}
+          className="mt-5"
         >
-          Della Resorts
-        </motion.h1>
+          <img
+            src="/della-logo.png"
+            alt="Della Resorts"
+            draggable={false}
+            className="mx-auto block w-auto h-[110px] sm:h-[140px] lg:h-[160px] drop-shadow-[0_10px_40px_rgba(201,168,76,0.25)]"
+          />
+        </motion.div>
 
         <motion.div
           initial={{ scaleX: 0, opacity: 0 }}
@@ -190,10 +194,8 @@ export default function Landing() {
 
       {/* Footer */}
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 pb-10 mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className="font-display italic text-2xl text-[#C9A84C] leading-none">
-            Della
-          </span>
+        <div className="flex items-center gap-4">
+          <img src="/della-logo.png" alt="Della Resorts" className="h-8 w-auto opacity-90" />
           <span className="font-ui text-[10px] uppercase tracking-[0.32em] text-[#F5F0E8]/40">
             Lonavala, Maharashtra · © 2026
           </span>

@@ -8,7 +8,7 @@ import Reservation from "./pages/placeholders/Reservation";
 import Sales from "./pages/placeholders/Sales";
 import GroupCoordinator from "./pages/placeholders/GroupCoordinator";
 import GeneralManager from "./pages/placeholders/GeneralManager";
-import GuestView from "./pages/placeholders/GuestView";
+import GuestFlow from "./pages/guest/GuestFlow";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
           <Route path="/sales" element={<Sales />} />
           <Route path="/group" element={<GroupCoordinator />} />
           <Route path="/gm" element={<GeneralManager />} />
-          <Route path="/guest" element={<GuestView />} />
+          <Route path="/guest" element={<GuestFlow />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

@@ -17,10 +17,25 @@ const seedReservations = [
     arrival: "2026-02-18",
     nights: 2,
     guests: 2,
+    adults: 2,
+    children: 1,
+    mealPlan: "Breakfast",
+    primaryGuest: {
+      fullName: "Aarav Mehta",
+      mobile: "+91 98200 45621",
+      email: "aarav.m@gmail.com",
+      nationality: "Indian",
+      country: "India",
+    },
+    coGuests: [
+      { fullName: "", relationship: "", nationality: "", dob: "", idType: "" },
+    ],
+    childGuests: [{ name: "Arjun", age: 6, guardian: "Aarav Mehta", dob: "" }],
     status: "Confirmed",
     checkinStatus: "Pending",
     idVerified: false,
     formSubmitted: false,
+    checkinPayload: null,
   },
   {
     id: "RES-2402",
@@ -155,8 +170,12 @@ export function AppProvider({ children }) {
   }, []);
 
   const markFormSubmitted = useCallback(
-    (id) => {
-      updateReservation(id, { formSubmitted: true, checkinStatus: "Form Submitted" });
+    (id, payload = null) => {
+      updateReservation(id, {
+        formSubmitted: true,
+        checkinStatus: "Form Submitted",
+        checkinPayload: payload,
+      });
       logActivity("guest", `Pre-check-in form submitted for ${id}`);
     },
     [updateReservation, logActivity]

@@ -32,8 +32,8 @@ export default function DashboardShell({
               Roles
             </button>
             <div className="h-5 w-px bg-[#C9A84C]/30" />
-            <Link to="/" className="font-display italic text-2xl text-[#C9A84C] leading-none" data-testid="brand-wordmark">
-              Della
+            <Link to="/" className="flex items-center" data-testid="brand-wordmark">
+              <img src="/della-logo.png" alt="Della Resorts" className="h-8 w-auto" />
             </Link>
             <span className="text-[10px] font-ui uppercase tracking-[0.32em] text-[#F5F0E8]/50 pl-3 border-l border-[#C9A84C]/20">
               {accent}
