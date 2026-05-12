@@ -71,6 +71,16 @@ export default function Step1Personal({ booking, payload, update, onNext, onBack
         onChange={(v) => update({ primary: { ...payload.primary, idFile: v } })}
         dataTestid="primary-id-upload"
       />
+      <div className="flex flex-wrap gap-1.5 mt-2 justify-center">
+        {["Aadhaar", "Passport", "DL"].map((t) => (
+          <span
+            key={t}
+            className="px-2 py-0.5 rounded-full border border-[#C9A84C]/30 text-[#C9A84C]/80 text-[9px] font-ui uppercase tracking-[0.2em]"
+          >
+            {t}
+          </span>
+        ))}
+      </div>
     </StepShell>
   );
 }

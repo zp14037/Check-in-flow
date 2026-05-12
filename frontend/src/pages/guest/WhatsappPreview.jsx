@@ -17,7 +17,7 @@ export default function WhatsappPreview({ booking, onOpen, onExit }) {
         <StatusBar tone="ivory" />
 
         {/* WhatsApp header */}
-        <div className="flex items-center gap-3 px-3 pt-1 pb-2 bg-[#202C33] border-b border-white/5">
+        <div className="flex items-center gap-3 px-3 pt-1 pb-2 bg-[#1F2937] border-b border-white/5">
           <button
             data-testid="wa-back"
             onClick={onExit}
@@ -45,7 +45,7 @@ export default function WhatsappPreview({ booking, onOpen, onExit }) {
         <div
           className="flex-1 px-3 pt-5 pb-6 relative overflow-hidden"
           style={{
-            backgroundColor: "#111B21",
+            backgroundColor: "#0B141A",
             backgroundImage:
               "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)",
             backgroundSize: "14px 14px",
@@ -76,13 +76,20 @@ export default function WhatsappPreview({ booking, onOpen, onExit }) {
               <div
                 className="relative px-4 pt-3 pb-5"
                 style={{
-                  background: "linear-gradient(135deg, #1a1200 0%, #3d2e00 100%)",
-                  minHeight: 90,
+                  background: "linear-gradient(135deg, #1a1200 0%, #2d1e00 100%)",
+                  minHeight: 80,
                 }}
               >
-                <p className="font-ui text-[9px] uppercase tracking-[0.32em] text-[#F5F0E8]/80">
+                <p className="font-ui uppercase text-[#C9A84C]" style={{ fontSize: 8, letterSpacing: "0.4em" }}>
                   Della Resorts · Lonavala
                 </p>
+                <span
+                  aria-hidden="true"
+                  className="absolute top-2.5 right-3 text-[#C9A84C]"
+                  style={{ fontSize: 11 }}
+                >
+                  ◆
+                </span>
                 {/* Mountain silhouette */}
                 <svg
                   viewBox="0 0 280 60"

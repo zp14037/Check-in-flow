@@ -13,7 +13,7 @@ export default function Confirmation({ booking, payload, onHome }) {
   }, []);
 
   const guestFirst = booking.primaryGuest.fullName.split(" ")[0];
-  const qrValue = `DELLA|${booking.id}|${guestFirst.toUpperCase()}|CHECKIN`;
+  const qrValue = `DELLA-${booking.id.replace("RES-", "RES")}-${guestFirst.toUpperCase()}-${booking.primaryGuest.fullName.split(" ")[1]?.toUpperCase() || ""}-CHECKIN-VERIFIED-2026`;
 
   return (
     <PhoneFrame>
@@ -112,7 +112,10 @@ export default function Confirmation({ booking, payload, onHome }) {
               className="mt-3 font-ui text-[8px] text-[#C9A84C]/70 text-center"
               style={{ letterSpacing: "0.2em" }}
             >
-              DELLA-{booking.id}-{guestFirst.toUpperCase()}-CHECKIN
+              {qrValue}
+            </p>
+            <p className="mt-1 font-ui text-[9px] text-[#C9A84C]/60 text-center" style={{ letterSpacing: "0.18em" }}>
+              SHOW AT FRONT DESK
             </p>
           </div>
         </motion.div>

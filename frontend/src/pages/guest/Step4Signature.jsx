@@ -8,6 +8,7 @@ export default function Step4Signature({ payload, update, onSubmit, onBack }) {
   const drawingRef = useRef(false);
   const lastRef = useRef({ x: 0, y: 0 });
   const [hasInk, setHasInk] = useState(Boolean(payload.signature));
+  const [submitting, setSubmitting] = useState(false);
 
   // Initial scale to DPR
   useEffect(() => {
@@ -73,7 +74,12 @@ export default function Step4Signature({ payload, update, onSubmit, onBack }) {
     update({ signature: null });
   };
 
-  const canSubmit = hasInk && payload.consent;
+  const canSubmit = hasInk && payload.consent && !submitting;
+
+  const handleSubmit = () => {
+    setSubmitting(true);
+    setTimeout(() => onSubmit(), 800);
+  };
 
   return (
     <StepShell
@@ -87,10 +93,17 @@ export default function Step4Signature({ payload, update, onSubmit, onBack }) {
             size="lg"
             className="w-full !text-[14px] !tracking-[0.16em]"
             disabled={!canSubmit}
-            onClick={onSubmit}
+            onClick={handleSubmit}
             dataTestid="submit-checkin"
           >
-            Submit My Check-in ✓
+            {submitting ? (
+              <>
+                <span className="inline-block w-3.5 h-3.5 rounded-full border-2 border-[#0D0D0D]/30 border-t-[#0D0D0D] animate-spin" />
+                Submitting…
+              </>
+            ) : (
+              "Submit My Check-in ✓"
+            )}
           </GoldButton>
           <p className="mt-3 font-body text-[10px] text-[#F5F0E8]/40 text-center">
             🔒 256-bit encrypted · Your data is safe with Della
