@@ -1,64 +1,28 @@
 import React from "react";
-import { Phone, Users, Flag } from "lucide-react";
+import { Phone, Users } from "lucide-react";
 
 /**
  * Source channel pills — colorful, distinct, never truncated.
- * Used everywhere a booking source is shown.
+ * Both OTAs (Booking.com and MakeMyTrip) share the orange-diamond icon.
  */
 
 const CONFIG = {
-  direct: {
-    label: "Direct Website",
-    bg: "#3B82F6",
-    fg: "#FFFFFF",
-    icon: null,
-  },
-  booking: {
-    label: "Booking.com",
-    bg: "#E8A020",
-    fg: "#1A1207",
-    icon: "diamond",
-  },
-  mmt: {
-    label: "MakeMyTrip",
-    bg: "#DC2626",
-    fg: "#FFFFFF",
-    icon: "flag",
-  },
-  sales: {
-    label: "Sales / Corporate",
-    bg: "#7C3AED",
-    fg: "#FFFFFF",
-    icon: null,
-  },
-  whatsapp: {
-    label: "WhatsApp / Call",
-    bg: "#16A34A",
-    fg: "#FFFFFF",
-    icon: "phone",
-  },
-  walkin: {
-    label: "Walk-in",
-    bg: "#6B7280",
-    fg: "#FFFFFF",
-    icon: null,
-  },
-  group: {
-    label: "Group / Event",
-    bg: "#0891B2",
-    fg: "#FFFFFF",
-    icon: "users",
-  },
+  direct: { label: "Direct Website", bg: "#3B82F6", fg: "#FFFFFF", icon: null },
+  booking: { label: "Booking.com", bg: "#E8A020", fg: "#1A1207", icon: "diamond" },
+  mmt: { label: "MakeMyTrip", bg: "#E8A020", fg: "#1A1207", icon: "diamond" },
+  sales: { label: "Sales / Corporate", bg: "#7C3AED", fg: "#FFFFFF", icon: null },
+  whatsapp: { label: "WhatsApp / Call", bg: "#16A34A", fg: "#FFFFFF", icon: "phone" },
+  walkin: { label: "Walk-in", bg: "#6B7280", fg: "#FFFFFF", icon: null },
+  group: { label: "Group / Event", bg: "#0891B2", fg: "#FFFFFF", icon: "users" },
 };
 
 const Icon = ({ name }) => {
   if (name === "phone") return <Phone size={11} strokeWidth={2.5} />;
   if (name === "users") return <Users size={11} strokeWidth={2.5} />;
-  if (name === "flag") return <Flag size={11} strokeWidth={2.5} />;
   if (name === "diamond")
     return (
       <span aria-hidden="true" style={{ fontSize: 11, lineHeight: 1 }}>
-        ◆
+        🔶
       </span>
     );
   return null;

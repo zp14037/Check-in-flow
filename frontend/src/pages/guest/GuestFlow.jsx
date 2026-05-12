@@ -40,7 +40,7 @@ export default function GuestFlow() {
     coGuests: [
       { fullName: "", relationship: "", nationality: "", dob: "", idType: "", idFile: null },
     ],
-    child: { name: "Arjun", dob: "", guardian: "Aarav Mehta" },
+    child: { name: "", dob: "", guardian: "" },
     occasion: "Anniversary",
     occasionDetail: "",
     specialRequests: "",

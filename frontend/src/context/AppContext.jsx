@@ -29,13 +29,11 @@ const seedReservations = [
       nationality: "Indian",
       country: "India",
     },
-    coGuests: [
-      { fullName: "Meera Mehta", relationship: "Spouse", nationality: "Indian", dob: "", idType: "Aadhaar", idUploaded: false },
-    ],
-    childGuests: [{ name: "Arjun Mehta", age: 6, guardian: "Aarav Mehta" }],
-    occasion: "Anniversary",
-    occasionDetail: "14th Anniversary · 20 February",
-    specialRequest: "Rose petal turndown + anniversary cake at dinner. Coordinate with F&B team.",
+    coGuests: [],
+    childGuests: [],
+    occasion: "",
+    occasionDetail: "",
+    specialRequest: "",
     idsSync: { status: "synced", at: "10:24 AM" },
     status: "Confirmed",
     checkinStatus: "Pending",
@@ -191,6 +189,53 @@ export function AppProvider({ children }) {
     [logActivity]
   );
 
+  const addReservation = useCallback(
+    (data) => {
+      const id =
+        data.id ||
+        `${data.sourcePrefix || "RES"}-${String(Date.now()).slice(-4)}`;
+      const newRes = {
+        id,
+        guestName: data.guestName || data.fullName,
+        roomType: data.roomType,
+        roomNumber: data.roomNumber || "TBD",
+        source: data.source || "direct",
+        arrival: data.arrival || new Date().toISOString().slice(0, 10),
+        expectedTime: data.expectedTime || "3:00 PM",
+        nights: data.nights || 1,
+        adults: data.adults || 2,
+        children: data.children || 0,
+        mobile: data.mobile || "",
+        primaryGuest: {
+          fullName: data.fullName,
+          mobile: data.mobile || "",
+          email: data.email || "—",
+          nationality: data.nationality || "Indian",
+          country: data.country || "India",
+        },
+        coGuests: [],
+        childGuests: [],
+        occasion: data.occasion || "",
+        specialRequest: data.specialRequest || "",
+        formSubmitted: false,
+        idVerified: false,
+        checkedIn: false,
+        checkinStatus: "Pending",
+        idsSync: { status: "synced", at: "Just Now" },
+        company: data.company,
+      };
+      setState((s) => ({ ...s, reservations: [newRes, ...s.reservations] }));
+      logActivity(
+        data.actor || "sales",
+        `${data.actor === "sales" ? "Sales lead" : "Booking"} created · ${
+          data.fullName
+        } · ${id}`
+      );
+      return id;
+    },
+    [logActivity]
+  );
+
   const resetDemo = useCallback(() => {
     setState(defaultState);
     localStorage.removeItem(STORAGE_KEY);
@@ -205,6 +250,7 @@ export function AppProvider({ children }) {
     markCheckedIn,
     captureMobile,
     createWalkin,
+    addReservation,
     resetDemo,
   };
 

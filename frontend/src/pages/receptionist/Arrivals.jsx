@@ -17,7 +17,6 @@ import KpiCard from "../../components/receptionist/KpiCard";
 import FilterTabs from "../../components/receptionist/FilterTabs";
 import SourcePill from "../../components/receptionist/SourcePill";
 import StatusPillLight from "../../components/receptionist/StatusPillLight";
-import GuestDrawer from "../../components/receptionist/GuestDrawer";
 import { toast } from "../../components/receptionist/ToastHost";
 
 const TAB_DEFS = [
@@ -108,8 +107,6 @@ export default function Arrivals() {
     year: "numeric",
   });
 
-  const drawerGuest = reservations.find((r) => r.id === drawerId);
-
   return (
     <div data-testid="arrivals-page">
       <TopBar title="Today's Arrivals" subtitle={today} />
@@ -191,12 +188,13 @@ export default function Arrivals() {
                   <React.Fragment key={r.id}>
                     <tr
                       data-testid={`row-${r.id}`}
-                      className={`group border-b border-[#F9F5F0] hover:bg-[#FAFAF8] transition-colors duration-150 relative ${
+                      onClick={() => navigate(`/receptionist/guest/${encodeURIComponent(r.id)}`)}
+                      className={`group border-b border-[#F9F5F0] hover:bg-[#FBF6EA] cursor-pointer transition-colors duration-150 relative ${
                         justSubmitted ? "bg-green-50/30 border-l-4 border-l-green-500" : ""
                       } ${busy === "done" ? "row-sweep" : ""}`}
                     >
                       <td className="px-4 py-4 align-middle">
-                        <p className="font-body text-[14px] text-[#1a1a1a] font-medium">
+                        <p className="font-body text-[14px] text-[#1a1a1a] font-medium hover:text-[#C9A84C] transition-colors">
                           {r.guestName}
                         </p>
                       </td>
@@ -221,7 +219,7 @@ export default function Arrivals() {
                           <StatusPillLight kind="verified" label="✅ Verified" />
                         ) : r.formSubmitted ? (
                           <button
-                            onClick={() => markIdVerified(r.id)}
+                            onClick={(e) => { e.stopPropagation(); markIdVerified(r.id); }}
                             className="text-[11px] font-ui text-[#C9A84C] hover:underline"
                             data-testid={`mark-id-${r.id}`}
                           >
@@ -231,12 +229,12 @@ export default function Arrivals() {
                           <span className="text-[11px] text-[#9CA3AF]">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-4 align-middle">
+                      <td className="px-4 py-4 align-middle" onClick={(e) => e.stopPropagation()}>
                         <RowActions
                           r={r}
                           busy={busy}
                           onResend={() => handleResend(r)}
-                          onVerifyDrawer={() => setDrawerId(r.id)}
+                          onVerifyDrawer={() => navigate(`/receptionist/guest/${encodeURIComponent(r.id)}`)}
                           onCheckIn={() => handleCheckIn(r)}
                           onCapture={() => handleCapture(r)}
                           onViewGroup={() => navigate("/coordinator")}
@@ -280,17 +278,6 @@ export default function Arrivals() {
           </table>
         </div>
       </div>
-
-      <GuestDrawer
-        guest={drawerGuest}
-        open={Boolean(drawerId)}
-        onClose={() => setDrawerId(null)}
-        onCompleteCheckin={(id) => {
-          setDrawerId(null);
-          const r = reservations.find((x) => x.id === id);
-          if (r) handleCheckIn(r);
-        }}
-      />
 
       <style>{`
         @keyframes rowSweep {

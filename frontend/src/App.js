@@ -11,6 +11,7 @@ import GuestFlow from "./pages/guest/GuestFlow";
 import ReceptionistLayout from "./pages/receptionist/ReceptionistLayout";
 import Arrivals from "./pages/receptionist/Arrivals";
 import NewWalkin from "./pages/receptionist/NewWalkin";
+import GuestEdit from "./pages/receptionist/GuestEdit";
 import PlaceholderTab from "./pages/receptionist/PlaceholderTab";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/receptionist" element={<ReceptionistLayout />}>
             <Route index element={<Arrivals />} />
             <Route path="walkin" element={<NewWalkin />} />
+            <Route path="guest/:id" element={<GuestEdit />} />
             <Route
               path="qr"
               element={

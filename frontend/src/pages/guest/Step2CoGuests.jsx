@@ -90,7 +90,7 @@ export default function Step2CoGuests({ booking, payload, update, onNext, onBack
         </div>
       </div>
 
-      {/* Children collapsible */}
+      {/* Children collapsible (only show if adults brought children — empty placeholder otherwise) */}
       <button
         type="button"
         onClick={() => setChildOpen((o) => !o)}
@@ -98,7 +98,7 @@ export default function Step2CoGuests({ booking, payload, update, onNext, onBack
         data-testid="children-toggle"
       >
         <span className="font-display italic text-[20px] text-[#F5F0E8]">
-          Children (1)
+          Children
         </span>
         {childOpen ? (
           <ChevronUp size={18} className="text-[#C9A84C]" />
@@ -114,14 +114,14 @@ export default function Step2CoGuests({ booking, payload, update, onNext, onBack
       >
         <div className="overflow-hidden">
           <div className="rounded-xl border border-[#C9A84C]/30 bg-[#C9A84C]/[0.03] p-4 mt-1">
-            <p className="font-display italic text-[16px] text-[#E8C97A]">
-              Arjun · Age 6 · Guardian: Aarav Mehta
+            <p className="font-body text-[12px] text-[#F5F0E8]/60 italic">
+              If you are travelling with children, please add their details below.
             </p>
             <Field
               label="Child Name"
               value={payload.child.name}
               onChange={(v) => update({ child: { ...payload.child, name: v } })}
-              prefilled
+              placeholder="Full name"
             />
             <Field
               label="Date of Birth"
@@ -133,7 +133,7 @@ export default function Step2CoGuests({ booking, payload, update, onNext, onBack
               label="Guardian Name"
               value={payload.child.guardian}
               onChange={(v) => update({ child: { ...payload.child, guardian: v } })}
-              prefilled
+              placeholder="Accompanying adult"
             />
           </div>
         </div>
