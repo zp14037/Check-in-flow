@@ -45,7 +45,6 @@ export default function Step4Signature({ payload, update, onSubmit, onBack }) {
     e.preventDefault();
     drawingRef.current = true;
     lastRef.current = getPoint(e);
-    setHasInk(true);
   };
   const move = (e) => {
     if (!drawingRef.current) return;
@@ -57,6 +56,7 @@ export default function Step4Signature({ payload, update, onSubmit, onBack }) {
     ctx.lineTo(p.x, p.y);
     ctx.stroke();
     lastRef.current = p;
+    if (!hasInk) setHasInk(true);
   };
   const end = () => {
     if (!drawingRef.current) return;
