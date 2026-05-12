@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Della Resorts brand tokens */
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --onyx: #0d0d0d;
+  --ivory: #f5f0e8;
+  --stone: #e8e2d9;
+  --forest: #0d1f0f;
+  --amber-flag: #e8a020;
+  --crimson: #b83232;
+  --sage: #3a7d44;
+
+  /* shadcn defaults (light) */
+  --background: 36 33% 93%;
+  --foreground: 0 0% 5%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 5%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 5%;
+  --primary: 44 55% 54%;
+  --primary-foreground: 0 0% 5%;
+  --secondary: 36 30% 88%;
+  --secondary-foreground: 0 0% 5%;
+  --muted: 36 20% 90%;
+  --muted-foreground: 0 0% 35%;
+  --accent: 44 55% 54%;
+  --accent-foreground: 0 0% 5%;
+  --destructive: 0 65% 46%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 36 18% 82%;
+  --input: 36 18% 82%;
+  --ring: 44 55% 54%;
+  --chart-1: 44 55% 54%;
+  --chart-2: 130 38% 36%;
+  --chart-3: 35 80% 52%;
+  --chart-4: 0 55% 46%;
+  --chart-5: 220 60% 50%;
+  --radius: 1rem;
+}
+
+.dark {
+  --background: 120 20% 8%;
+  --foreground: 36 33% 93%;
+  --card: 0 0% 7%;
+  --card-foreground: 36 33% 93%;
+  --popover: 0 0% 7%;
+  --popover-foreground: 36 33% 93%;
+  --primary: 44 55% 54%;
+  --primary-foreground: 0 0% 5%;
+  --secondary: 0 0% 14%;
+  --secondary-foreground: 36 33% 93%;
+  --muted: 0 0% 14%;
+  --muted-foreground: 36 20% 70%;
+  --accent: 44 55% 54%;
+  --accent-foreground: 0 0% 5%;
+  --destructive: 0 60% 45%;
+  --destructive-foreground: 36 33% 93%;
+  --border: 0 0% 18%;
+  --input: 0 0% 18%;
+  --ring: 44 55% 54%;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--ivory);
+  color: var(--onyx);
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+/* Font helpers */
+.font-display {
+  font-family: "Cormorant Garamond", serif;
+}
+.font-ui {
+  font-family: "Montserrat", sans-serif;
+}
+.font-body {
+  font-family: "Inter", sans-serif;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--gold);
+  color: var(--onyx);
+}
+
+/* Gold thin underline accent */
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--gold) 30%,
+    var(--gold) 70%,
+    transparent
+  );
+}
+
+/* Subtle grain overlay (for dark hero) */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+@layer base {
+  [data-debug-wrapper="true"] {
+    display: contents !important;
+  }
+}
