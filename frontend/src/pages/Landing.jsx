@@ -1,15 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  Bell,
-  Mail,
-  Briefcase,
-  Users,
-  BarChart3,
-  Smartphone,
-  ArrowUpRight,
-} from "lucide-react";
+import { Bell, Mail, Briefcase, Users, ChartBar as BarChart3, Smartphone, ArrowUpRight } from "lucide-react";
 import GoldParticles from "../components/della/GoldParticles";
 
 const ROLES = [
@@ -49,7 +41,7 @@ const ROLES = [
     key: "management",
     icon: BarChart3,
     title: "Operations Manager",
-    desc: "Executive overview, all modules",
+    desc: "Mr. Rahil Bakali · Executive overview",
     micro: "All dashboards · RPA engine · System health",
     path: "/management",
   },
