@@ -51,6 +51,11 @@ let webpackConfig = {
         ],
       };
 
+      // Remove ForkTsCheckerWebpackPlugin — incompatible with Node 22 due to ajv version conflict
+      webpackConfig.plugins = webpackConfig.plugins.filter(
+        (p) => p.constructor && p.constructor.name !== "ForkTsCheckerWebpackPlugin"
+      );
+
       // Add health check plugin to webpack if enabled
       if (config.enableHealthCheck && healthPluginInstance) {
         webpackConfig.plugins.push(healthPluginInstance);

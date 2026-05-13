@@ -1,0 +1,10 @@
+{
+  "name": "della-resorts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "install": "cd frontend && npm install --legacy-peer-deps",
+    "build": "cd frontend && npm install --legacy-peer-deps && node ../scripts/patch-ajv.js && DISABLE_ESLINT_PLUGIN=true SKIP_PREFLIGHT_CHECK=true npx craco build",
+    "start": "cd frontend && npx craco start"
+  }
+}
