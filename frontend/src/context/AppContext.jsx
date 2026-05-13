@@ -5,7 +5,29 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
  * Persists across screens & page refreshes via localStorage.
  */
 
-const STORAGE_KEY = "della_resorts_state_v3";
+const STORAGE_KEY = "della_resorts_state_v5";
+
+const GROUP_NAMES = [
+  "Aakash Iyer", "Pooja Reddy", "Karan Bhatt", "Sneha Pillai", "Manish Gupta", "Riya Joseph",
+  "Aditya Nair", "Tanvi Singh", "Devansh Khanna", "Meera Kulkarni", "Harshad Patel", "Ananya Joshi",
+  "Yash Malhotra", "Diya Saxena", "Ishaan Roy", "Nitya Aggarwal", "Aryan Bose", "Sara Banerjee",
+  "Vihaan Chaudhary", "Aanya Pillai", "Rohit Menon", "Kritika Verma", "Aman Kapoor", "Tara Shetty",
+  "Dhruv Pandey", "Ira Sethi", "Kabir Sharma", "Naina Bedi", "Mihir Trivedi", "Avni Rastogi",
+  "Sahil Khurana", "Zoya Ansari",
+];
+
+function makeGroupGuests() {
+  return GROUP_NAMES.map((name, i) => ({
+    id: `GRP-G${String(i + 1).padStart(2, "0")}`,
+    name,
+    mobile: i < 18 ? `+91 98${String(10000 + i * 113).slice(0, 5)} ${String(10000 + i * 211).slice(0, 5)}` : "",
+    idType: i < 18 ? "Aadhaar Card" : "",
+    idFile: i < 18 ? `aadhaar_${i + 1}.jpg` : null,
+    submitted: i < 18,
+    signed: i < 18,
+    submittedAt: i < 18 ? Date.now() - (32 - i) * 60_000 : null,
+  }));
+}
 
 const seedReservations = [
   {
@@ -236,6 +258,31 @@ export function AppProvider({ children }) {
     [logActivity]
   );
 
+  const markGroupGuestSubmitted = useCallback(
+    (reservationId, guestId, patch = {}) => {
+      setState((s) => ({
+        ...s,
+        reservations: s.reservations.map((r) => {
+          if (r.id !== reservationId) return r;
+          const groupGuests = (r.groupGuests || []).map((g) =>
+            g.id === guestId
+              ? { ...g, submitted: true, signed: true, submittedAt: Date.now(), ...patch }
+              : g
+          );
+          const submittedCount = groupGuests.filter((g) => g.submitted).length;
+          return {
+            ...r,
+            groupGuests,
+            groupCheckedIn: submittedCount,
+            checkinStatus: `Group · ${submittedCount}/${r.groupTotal}`,
+          };
+        }),
+      }));
+      logActivity("group-guest", `Group guest ${guestId} submitted under ${reservationId}`);
+    },
+    [logActivity]
+  );
+
   const resetDemo = useCallback(() => {
     setState(defaultState);
     localStorage.removeItem(STORAGE_KEY);
@@ -251,6 +298,7 @@ export function AppProvider({ children }) {
     captureMobile,
     createWalkin,
     addReservation,
+    markGroupGuestSubmitted,
     resetDemo,
   };
 

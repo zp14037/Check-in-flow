@@ -48,7 +48,7 @@ const ROLES = [
   {
     key: "management",
     icon: BarChart3,
-    title: "General Manager",
+    title: "Operations Manager",
     desc: "Executive overview, all modules",
     micro: "All dashboards · RPA engine · System health",
     path: "/management",

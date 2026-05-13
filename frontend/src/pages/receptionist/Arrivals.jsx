@@ -279,6 +279,30 @@ export default function Arrivals() {
         </div>
       </div>
 
+      {/* RPA mini feed for reception */}
+      <div className="mx-6 my-6 bg-white rounded-2xl border border-[#E8E2D9] shadow-sm p-5">
+        <div className="flex items-center justify-between">
+          <p className="font-ui text-[11px] uppercase tracking-[0.22em] text-[#C9A84C] font-semibold">
+            🤖 Recent RPA Write-Backs · IDS FortuneNext
+          </p>
+          <p className="font-ui text-[10px] text-[#9CA3AF]">live feed</p>
+        </div>
+        <ul className="mt-3 divide-y divide-[#F9F5F0]">
+          {(reservations.filter((r) => r.formSubmitted || r.idVerified || r.checkedIn).slice(0, 5)).map((r) => (
+            <li key={r.id} className="py-2 flex items-center gap-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+              <span className="font-ui text-[11px] text-[#9CA3AF] uppercase tracking-[0.14em] w-16">
+                {(r.idsSync?.at || "now")}
+              </span>
+              <span className="font-body text-[13px] text-[#1a1a1a] flex-1">
+                {r.guestName} · {r.id} · 9 fields written
+              </span>
+              <span className="text-green-600 text-xs font-ui font-semibold">✅ Synced</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <style>{`
         @keyframes rowSweep {
           0% { background: linear-gradient(90deg, rgba(34,197,94,0.2) 0%, transparent 0%); }

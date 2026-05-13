@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   BarChart,
   Bar,
@@ -75,10 +76,13 @@ export default function GeneralManager() {
   const verifiedCount = reservations.filter((r) => r.idVerified).length;
 
   // ── RPA pipeline state ──
+  const navigate = useNavigate();
   const [stepIdx, setStepIdx] = useState(-1); // -1 idle
   const [running, setRunning] = useState(false);
   const [rpaLog, setRpaLog] = useState(SEED_RPA_LOG);
   const [showNode4Tooltip, setShowNode4Tooltip] = useState(false);
+  const [fortuneOpen, setFortuneOpen] = useState(false);
+  const [fortuneFields, setFortuneFields] = useState({});
 
   // ── Health panel ticking ──
   const [pingTick, setPingTick] = useState(0);
@@ -101,16 +105,35 @@ export default function GeneralManager() {
     if (running) return;
     setRunning(true);
     setStepIdx(0);
+    setFortuneOpen(true);
+    setFortuneFields({});
     setTimeout(() => setStepIdx(1), 800);
     setTimeout(() => setStepIdx(2), 1400);
     setTimeout(() => {
       setStepIdx(3);
       setShowNode4Tooltip(true);
+      // Type fields into FortuneNext mock
+      const FIELDS = [
+        ["Guest Name", "Aarav Mehta"],
+        ["Booking Ref", "RES-2401"],
+        ["Mobile", "+91 98200 45621"],
+        ["Email", "aarav.m@gmail.com"],
+        ["Nationality", "Indian"],
+        ["ID Type", "Aadhaar Card"],
+        ["ID Number", "**** 4521"],
+        ["Room", "CV-12 · Cliff Villa"],
+        ["Occasion", "Anniversary"],
+      ];
+      FIELDS.forEach(([k, v], i) => {
+        setTimeout(() => {
+          setFortuneFields((m) => ({ ...m, [k]: v }));
+        }, i * 95);
+      });
     }, 1800);
     setTimeout(() => {
       setShowNode4Tooltip(false);
       setStepIdx(4);
-    }, 2400);
+    }, 2700);
     setTimeout(() => {
       setRpaLog((arr) => [
         {
@@ -123,17 +146,20 @@ export default function GeneralManager() {
         },
         ...arr,
       ]);
-      // Reset IDS ping
       lastCheckRef.current = Date.now();
       setHealth((arr) =>
         arr.map((h) => (h.name === "IDS FortuneNext" ? { ...h, lastPing: 0 } : h))
       );
       toast("✅ RPA wrote 9 fields → IDS FortuneNext (0.8s)");
-    }, 3000);
+    }, 3200);
     setTimeout(() => {
       setStepIdx(-1);
       setRunning(false);
-    }, 3800);
+    }, 4000);
+    setTimeout(() => {
+      setFortuneOpen(false);
+      setFortuneFields({});
+    }, 6500);
   };
 
   const today = new Date().toLocaleDateString("en-GB", {
@@ -145,9 +171,9 @@ export default function GeneralManager() {
 
   return (
     <DashboardShell
-      title="Good Evening, Mr. Kapoor"
-      subtitle={`General Manager · Full System Access · ${today}`}
-      accent="General Manager"
+      title="Good Evening, Mr. Rahil Bakali"
+      subtitle={`Operations Manager · Full System Access · ${today}`}
+      accent="Operations Manager"
       rightSlot={
         <div className="flex items-center gap-3">
           <button className="inline-flex items-center gap-1.5 text-[11px] font-ui uppercase tracking-[0.2em] text-[#F5F0E8]/80 hover:text-[#C9A84C] transition-colors">
@@ -160,7 +186,7 @@ export default function GeneralManager() {
             </span>
           </button>
           <span className="w-9 h-9 rounded-full bg-[#C9A84C] flex items-center justify-center text-[#0D0D0D] text-xs font-ui font-bold ring-2 ring-[#C9A84C]/40">
-            VK
+            RB
           </span>
         </div>
       }
@@ -174,6 +200,7 @@ export default function GeneralManager() {
           label="Today's Arrivals"
           tooltip="Total guests expected per IDS manifest"
           dataTestid="gm-kpi-arrivals"
+          onClick={() => navigate("/receptionist")}
         />
         <Kpi
           icon={CheckCircle2}
@@ -185,6 +212,7 @@ export default function GeneralManager() {
           progress={submittedPct}
           sub={`${submittedPct}% complete · ${submittedCount} live`}
           dataTestid="gm-kpi-submitted"
+          onClick={() => navigate("/receptionist")}
         />
         <Kpi
           icon={AlertCircle}
@@ -193,6 +221,7 @@ export default function GeneralManager() {
           valueColor="text-amber-500"
           label="OTA No-Contact"
           tooltip="Booking.com / MakeMyTrip bookings where contact is unavailable pre-arrival."
+          onClick={() => navigate("/receptionist")}
         />
         <Kpi
           icon={Users}
@@ -200,11 +229,12 @@ export default function GeneralManager() {
           value="1 · TCS · 32 pax"
           valueColor="text-teal-700"
           label="Active Groups"
-          tooltip="Group blocks currently in-progress."
+          tooltip="Click to open the Group Coordinator live tracker."
           progress={56}
           progressColor="bg-amber-400"
-          sub="18 / 32 guests checked-in"
+          sub="18 / 32 guests submitted"
           dataTestid="gm-kpi-groups"
+          onClick={() => navigate("/coordinator")}
         />
         <Kpi
           icon={Wrench}
@@ -212,9 +242,10 @@ export default function GeneralManager() {
           value="All Synced ✓"
           valueColor="text-green-600"
           label="IDS Sync"
-          tooltip="RPA has successfully written all submitted form data into IDS FortuneNext."
+          tooltip="RPA has successfully written all submitted form data into IDS FortuneNext. Click to scroll to the RPA Engine."
           sub="Last write-back: 34s ago"
           extra={<span className="absolute top-5 right-5 w-2 h-2 rounded-full bg-green-400 pulse-ring" />}
+          onClick={() => document.getElementById("rpa-section")?.scrollIntoView({ behavior: "smooth" })}
         />
         <Kpi
           icon={Clock3}
@@ -222,8 +253,9 @@ export default function GeneralManager() {
           value="₹4,82,000"
           valueColor="text-[#C9A84C]"
           label="Revenue Today"
-          tooltip="Realised revenue against expected end-of-day target."
+          tooltip="Realised revenue against expected end-of-day target. Click to open Sales."
           sub="₹6,20,000 projected EOD"
+          onClick={() => navigate("/sales")}
         />
       </div>
 
@@ -297,13 +329,18 @@ export default function GeneralManager() {
       <Funnel submittedCount={submittedCount} submittedPct={submittedPct} verifiedCount={verifiedCount} />
 
       {/* RPA Engine */}
-      <RpaSection
-        stepIdx={stepIdx}
-        running={running}
-        onRun={runDemoSync}
-        showNode4Tooltip={showNode4Tooltip}
-        rpaLog={rpaLog}
-      />
+      <div id="rpa-section">
+        <RpaSection
+          stepIdx={stepIdx}
+          running={running}
+          onRun={runDemoSync}
+          showNode4Tooltip={showNode4Tooltip}
+          rpaLog={rpaLog}
+        />
+      </div>
+
+      {/* FortuneNext faux PMS overlay */}
+      <FortuneNextMock open={fortuneOpen} fields={fortuneFields} onClose={() => setFortuneOpen(false)} />
 
       {/* System Health */}
       <SystemHealth health={health} pingTick={pingTick} lastCheckAgo={lastCheckAgo} />
@@ -361,12 +398,15 @@ function timeAgo(ts) {
   return `${h}h ago`;
 }
 
-function Kpi({ icon: Icon, color, value, valueColor = "text-[#1a1a1a]", label, sub, tooltip, progress, progressColor = "bg-green-500", extra, dataTestid }) {
+function Kpi({ icon: Icon, color, value, valueColor = "text-[#1a1a1a]", label, sub, tooltip, progress, progressColor = "bg-green-500", extra, dataTestid, onClick }) {
   const [hover, setHover] = useState(false);
   return (
     <div
       data-testid={dataTestid}
-      className="relative bg-white rounded-2xl shadow-sm border border-[#E8E2D9] p-5 overflow-hidden"
+      onClick={onClick}
+      className={`relative bg-white rounded-2xl shadow-sm border border-[#E8E2D9] p-5 overflow-hidden transition-all ${
+        onClick ? "cursor-pointer hover:border-[#C9A84C] hover:shadow-md" : ""
+      }`}
     >
       {extra}
       <div className="flex items-start justify-between">
@@ -728,5 +768,101 @@ function SystemHealth({ health, pingTick, lastCheckAgo }) {
       {/* keep linter quiet */}
       <span className="hidden">{pingTick}</span>
     </section>
+  );
+}
+
+
+function FortuneNextMock({ open, fields, onClose }) {
+  if (!open) return null;
+  const ORDER = [
+    "Guest Name",
+    "Booking Ref",
+    "Mobile",
+    "Email",
+    "Nationality",
+    "ID Type",
+    "ID Number",
+    "Room",
+    "Occasion",
+  ];
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px]" data-testid="fortunenext-mock">
+      <div className="bg-[#F0F4F8] rounded-2xl shadow-2xl border border-[#94A3B8]/40 w-[640px] max-w-[95vw] overflow-hidden fortunenext-pop">
+        {/* Title bar */}
+        <div className="bg-[#1E3A5F] text-white px-4 py-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-red-400" />
+            <span className="w-3 h-3 rounded-full bg-yellow-400" />
+            <span className="w-3 h-3 rounded-full bg-green-400" />
+            <span className="ml-3 font-ui text-[11px] uppercase tracking-[0.18em]">
+              IDS FortuneNext PMS · Lonavala
+            </span>
+          </div>
+          <button onClick={onClose} className="text-white/70 hover:text-white text-sm font-ui">
+            ✕
+          </button>
+        </div>
+
+        {/* Toolbar */}
+        <div className="bg-[#2D5285] text-white/90 px-4 py-1.5 flex items-center gap-4 font-ui text-[10px] uppercase tracking-[0.14em]">
+          <span>File</span><span>Reservation</span><span className="text-yellow-300">Check-in</span><span>Reports</span><span>Tools</span>
+        </div>
+
+        {/* Body */}
+        <div className="p-5">
+          <div className="flex items-center justify-between mb-3">
+            <p className="font-ui text-[11px] font-bold text-[#1E3A5F] tracking-wider">
+              GUEST REGISTRATION · NEW ARRIVAL
+            </p>
+            <span className="inline-flex items-center gap-1 text-[10px] text-green-700">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              RPA AGENT WRITING…
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 bg-white rounded-md border border-[#CBD5E1] p-4">
+            {ORDER.map((k) => {
+              const v = fields[k];
+              return (
+                <div key={k} className="border-b border-[#E2E8F0] pb-1.5">
+                  <p className="text-[9px] font-ui uppercase tracking-[0.16em] text-[#64748B]">{k}</p>
+                  <div className="min-h-[20px] flex items-center">
+                    {v ? (
+                      <span className="font-body text-[13px] text-[#0F172A] font-medium typewriter-in">
+                        {v}
+                      </span>
+                    ) : (
+                      <span className="inline-block w-2 h-3.5 bg-[#94A3B8] animate-pulse" />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-3 flex items-center justify-between">
+            <p className="font-ui text-[9px] text-[#64748B] uppercase tracking-[0.14em]">
+              Form NCRB-C · FRRO compliance ready
+            </p>
+            <span className="inline-flex items-center px-3 py-1 rounded bg-green-100 text-green-700 text-[10px] font-ui font-bold uppercase tracking-wider">
+              Auto-saved · {Object.keys(fields).length}/9 fields
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fnPop {
+          from { transform: scale(0.96); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .fortunenext-pop { animation: fnPop 280ms ease-out; }
+        @keyframes typeIn {
+          from { clip-path: inset(0 100% 0 0); }
+          to { clip-path: inset(0 0 0 0); }
+        }
+        .typewriter-in { animation: typeIn 280ms ease-out; }
+      `}</style>
+    </div>
   );
 }
